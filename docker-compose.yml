@@ -1,0 +1,67 @@
+version: '3.1'
+services:
+  pipeline-metrics-db:
+    image: influxdb
+    hostname: pipeline-metrics-db
+    ports:
+      - 4010:8086
+    volumes:
+      - influx_data:/var/lib/influxdb
+      - influx_config:/etc/influxdb
+    networks:
+      - back_tier
+
+  pipeline-grafana:
+    image: grafana/grafana
+    hostname: pipeline-grafana
+    ports:
+      - 4020:3000
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: 1
+      GF_AUTH_ANONYMOUS_ORG_NAME: "Janelia"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - grafana_config:/etc/grafana
+      - grafana_log:/var/log/grafana
+    networks:
+      - back_tier
+
+  pipeline-message-queue:
+    image: rabbitmq:3-management
+    container_name: "pipeline_message_queue"
+    hostname: message-queue
+    ports:
+      - 4072:5672
+      - 4672:15672
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "mqsecret"
+    volumes:
+      - mq_data:/var/lib/rabbitmq
+    networks:
+      - back_tier
+
+  coordinator-db:
+    image: postgres:9
+    container_name: "pipeline_coordinator_db"
+    hostname: coordinator-db
+    ports:
+      - 4432:5432
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_PASSWORD: "pgsecret"
+    volumes:
+      - coordinator_data:/var/lib/postgresql/data
+      - ./datastore/coordinator:/docker-entrypoint-initdb.d
+    networks:
+      - back_tier
+
+volumes:
+  influx_data:
+  influx_config:
+  grafana_config:
+  grafana_log:
+  grafana_data:
+  mq_data:
+  coordinator_data:
+networks:
+  back_tier:
