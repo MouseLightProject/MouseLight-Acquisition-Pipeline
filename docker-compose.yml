@@ -40,18 +40,42 @@ services:
     networks:
       - back_tier
 
-  coordinator-db:
+  pipeline-db:
     image: postgres:9
-    container_name: "pipeline_coordinator_db"
-    hostname: coordinator-db
+    container_name: "pipeline_db"
+    hostname: pipeline-db
     ports:
       - 4432:5432
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_PASSWORD: "pgsecret"
     volumes:
-      - coordinator_data:/var/lib/postgresql/data
-      - ./datastore/coordinator:/docker-entrypoint-initdb.d
+      - pipeline_data:/var/lib/postgresql/data
+      - ./datastore/pipeline:/docker-entrypoint-initdb.d
+    networks:
+      - back_tier
+
+  pipeline-api:
+    image: mouselightpipeline/pipeline-api
+    container_name: "pipeline_api"
+    hostname: pipeline-api
+    environment:
+      NODE_ENV: production
+    volumes:
+      - "${TASKS_VOL}:/groups/mousebrainmicro/mousebrainmicro"
+    ports:
+      - 3000:3000
+    networks:
+      - back_tier
+
+  pipeline-client:
+    image: mouselightpipeline/pipeline-client
+    container_name: "pipeline_client"
+    hostname: pipeline-client
+    environment:
+      NODE_ENV: production
+    ports:
+      - 4000:4000
     networks:
       - back_tier
 
@@ -62,6 +86,6 @@ volumes:
   grafana_log:
   grafana_data:
   mq_data:
-  coordinator_data:
+  pipeline_data:
 networks:
   back_tier:
