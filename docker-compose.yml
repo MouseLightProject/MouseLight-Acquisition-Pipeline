@@ -62,7 +62,7 @@ services:
     environment:
       NODE_ENV: production
     volumes:
-      - "${TASKS_VOL}:/groups/mousebrainmicro/mousebrainmicro"
+      - "${TASKS_VOLUME}:/groups/mousebrainmicro/mousebrainmicro"
     ports:
       - 3000:3000
     networks:
