@@ -1,21 +1,23 @@
 version: '3.1'
 services:
-  pipeline-metrics-db:
+  metrics-db:
     image: influxdb
     hostname: pipeline-metrics-db
+    container_name: "pipeline-metrics-db"
     ports:
-      - 4010:8086
+      - 3900:8086
     volumes:
       - influx_data:/var/lib/influxdb
       - influx_config:/etc/influxdb
     networks:
       - back_tier
 
-  pipeline-grafana:
+  grafana:
     image: grafana/grafana
     hostname: pipeline-grafana
+    container_name: "pipeline-grafana"
     ports:
-      - 4020:3000
+      - 3910:3000
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: 1
       GF_AUTH_ANONYMOUS_ORG_NAME: "Janelia"
@@ -26,13 +28,13 @@ services:
     networks:
       - back_tier
 
-  pipeline-message-queue:
+  message-queue:
     image: rabbitmq:3-management
     container_name: "pipeline_message_queue"
-    hostname: message-queue
+    hostname: pipeline-message-queue
     ports:
-      - 4072:5672
-      - 4672:15672
+      - 3982:5672
+      - 3992:15672
     environment:
       RABBITMQ_ERLANG_COOKIE: "mqsecret"
     volumes:
@@ -45,12 +47,12 @@ services:
     container_name: "pipeline_db"
     hostname: pipeline-db
     ports:
-      - 4432:5432
+      - 3932:5432
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_PASSWORD: "pgsecret"
     volumes:
-      - pipeline_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
       - ./datastore/pipeline:/docker-entrypoint-initdb.d
     networks:
       - back_tier
@@ -60,9 +62,10 @@ services:
     container_name: "pipeline_api"
     hostname: pipeline-api
     environment:
-      NODE_ENV: production
+      PIPELINE_VOLUME: ${PIPELINE_VOLUME}
     volumes:
-      - "${TASKS_VOLUME}:/groups/mousebrainmicro/mousebrainmicro"
+      - api_data:/app/internal-data
+      - "${PIPELINE_VOLUME}:/opt/pipeline"
     ports:
       - 3000:3000
     networks:
@@ -72,10 +75,8 @@ services:
     image: mouselightpipeline/pipeline-client
     container_name: "pipeline_client"
     hostname: pipeline-client
-    environment:
-      NODE_ENV: production
     ports:
-      - 4000:4000
+      - 3100:3100
     networks:
       - back_tier
 
@@ -86,6 +87,8 @@ volumes:
   grafana_log:
   grafana_data:
   mq_data:
-  pipeline_data:
+  postgres_data:
+  api_data:
+
 networks:
   back_tier:

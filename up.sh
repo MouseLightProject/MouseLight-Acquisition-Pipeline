@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
-if [ -z "${TASKS_VOL}" ]; then
-#   Until ml-ww1 has standard mounts
-#   export TRANSFORM_VOL="/groups/mousebrainmicro/mousebrainmicro"
-    export TASKS_VOL="/mnt/groups"
+if [ -a "options.sh" ]; then
+    source "options.sh"
+fi
+
+if [ -z "$PIPELINE_VOLUME" ]; then
+    echo "PIPELINE_VOLUME is a required environment variable.  This is typically defined in options.sh"
+    exit 1
 fi
 
 docker-compose -p pipeline up -d
