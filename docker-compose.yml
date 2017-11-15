@@ -57,24 +57,12 @@ services:
     networks:
       - back_tier
 
-  pipeline-api:
-    image: mouselightpipeline/pipeline-api
-    container_name: "pipeline_api"
-    hostname: pipeline-api
-    environment:
-      PIPELINE_VOLUME: ${PIPELINE_VOLUME}
-    volumes:
-      - api_data:/app/internal-data
-      - "${PIPELINE_VOLUME}:/opt/pipeline"
-    ports:
-      - 3000:3000
-    networks:
-      - back_tier
-
   pipeline-client:
     image: mouselightpipeline/pipeline-client
     container_name: "pipeline_client"
     hostname: pipeline-client
+    environment:
+      PIPELINE_API_HOST: ${PIPELINE_API_HOST}
     ports:
       - 3100:3100
     networks:
@@ -88,7 +76,6 @@ volumes:
   grafana_data:
   mq_data:
   postgres_data:
-  api_data:
 
 networks:
   back_tier:
