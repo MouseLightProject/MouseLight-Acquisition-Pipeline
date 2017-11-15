@@ -75,7 +75,6 @@ volumes:
   grafana_log:
   grafana_data:
   mq_data:
-  postgres_data:
   pipeline_data:
 
 networks:
