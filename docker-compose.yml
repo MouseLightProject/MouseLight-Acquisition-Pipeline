@@ -76,6 +76,7 @@ volumes:
   grafana_data:
   mq_data:
   postgres_data:
+  pipeline_data:
 
 networks:
   back_tier:
