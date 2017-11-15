@@ -30,7 +30,7 @@ services:
 
   message-queue:
     image: rabbitmq:3-management
-    container_name: "pipeline_message_queue"
+    container_name: "pipeline-message-queue"
     hostname: pipeline-message-queue
     ports:
       - 3982:5672
@@ -44,7 +44,7 @@ services:
 
   pipeline-db:
     image: postgres:9
-    container_name: "pipeline_db"
+    container_name: "pipeline-db"
     hostname: pipeline-db
     ports:
       - 3932:5432
@@ -52,14 +52,14 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_PASSWORD: "pgsecret"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pipeline_data:/var/lib/postgresql/data
       - ./datastore/pipeline:/docker-entrypoint-initdb.d
     networks:
       - back_tier
 
   pipeline-client:
     image: mouselightpipeline/pipeline-client
-    container_name: "pipeline_client"
+    container_name: "pipeline-client"
     hostname: pipeline-client
     environment:
       PIPELINE_API_HOST: ${PIPELINE_API_HOST}
