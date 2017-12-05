@@ -68,6 +68,30 @@ services:
     networks:
       - back_tier
 
+  vega-client:
+    image: mouselightpipeline/worker-client
+    container_name: "vega-client"
+    hostname: vega-client
+    environment:
+      PIPELINE_WORKER_API_HOST: vega.int.janelia.org
+      PIPELINE_WORKER_API_PORT: 3500
+    ports:
+      - 3600:3600
+    networks:
+      - back_tier
+
+  vega-cluster-client:
+    image: mouselightpipeline/worker-client
+    container_name: "vega-cluster-client"
+    hostname: vega-cluster-client
+    environment:
+      PIPELINE_WORKER_API_HOST: vega.int.janelia.org
+      PIPELINE_WORKER_API_PORT: 3510
+    ports:
+      - 3610:3600
+    networks:
+      - back_tier
+
 volumes:
   influx_data:
   influx_config:
