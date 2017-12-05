@@ -92,6 +92,54 @@ services:
     networks:
       - back_tier
 
+  sirius-client:
+    image: mouselightpipeline/worker-client
+    container_name: "sirius-client"
+    hostname: sirius-client
+    environment:
+      PIPELINE_WORKER_API_HOST: ${PIPELINE_SIRIUS_API_HOST}
+      PIPELINE_WORKER_API_PORT: 3500
+    ports:
+      - 3620:3600
+    networks:
+      - back_tier
+
+  sirius-cluster-client:
+    image: mouselightpipeline/worker-client
+    container_name: "sirius-cluster-client"
+    hostname: sirius-cluster-client
+    environment:
+      PIPELINE_WORKER_API_HOST: ${PIPELINE_SIRIUS_API_HOST}
+      PIPELINE_WORKER_API_PORT: 3510
+    ports:
+      - 3630:3600
+    networks:
+      - back_tier
+
+  canopus-client:
+    image: mouselightpipeline/worker-client
+    container_name: "canopus-client"
+    hostname: canopus-client
+    environment:
+      PIPELINE_WORKER_API_HOST: ${PIPELINE_CANOPUS_API_HOST}
+      PIPELINE_WORKER_API_PORT: 3500
+    ports:
+      - 3640:3600
+    networks:
+      - back_tier
+
+  canopus-cluster-client:
+    image: mouselightpipeline/worker-client
+    container_name: "canopus-cluster-client"
+    hostname: canopus-cluster-client
+    environment:
+      PIPELINE_WORKER_API_HOST: ${PIPELINE_CANOPUS_API_HOST}
+      PIPELINE_WORKER_API_PORT: 3510
+    ports:
+      - 3650:3600
+    networks:
+      - back_tier
+
 volumes:
   influx_data:
   influx_config:
