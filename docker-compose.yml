@@ -3,7 +3,6 @@ services:
   metrics-db:
     image: influxdb
     hostname: pipeline-metrics-db
-    container_name: "pipeline-metrics-db"
     ports:
       - ${METRICS_DB_PORT}:8086
     volumes:
@@ -15,7 +14,6 @@ services:
   grafana:
     image: grafana/grafana
     hostname: pipeline-grafana
-    container_name: "pipeline-grafana"
     ports:
       - ${GRAFANA_PORT}:3000
     environment:
@@ -30,7 +28,6 @@ services:
 
   message-queue:
     image: rabbitmq:3-management
-    container_name: "pipeline-message-queue"
     hostname: pipeline-message-queue
     ports:
       - ${MESSAGE_QUEUE_PORT}:5672
@@ -44,7 +41,6 @@ services:
 
   pipeline-db:
     image: postgres:9
-    container_name: "pipeline-db"
     hostname: pipeline-db
     ports:
       - ${PIPELINE_DB_PORT}:5432
@@ -59,7 +55,6 @@ services:
 
   pipeline-client:
     image: mouselightpipeline/pipeline-client
-    container_name: "pipeline-client"
     hostname: pipeline-client
     environment:
       PIPELINE_API_HOST: ${PIPELINE_API_HOST}
@@ -70,7 +65,6 @@ services:
 
   canopus-client:
     image: mouselightpipeline/worker-client
-    container_name: "canopus-client"
     hostname: canopus-client
     environment:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_CANOPUS_API_HOST}
@@ -82,7 +76,6 @@ services:
 
   canopus-cluster-client:
     image: mouselightpipeline/worker-client
-    container_name: "canopus-cluster-client"
     hostname: canopus-cluster-client
     environment:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_CANOPUS_API_HOST}
@@ -94,7 +87,6 @@ services:
 
   sirius-client:
     image: mouselightpipeline/worker-client
-    container_name: "sirius-client"
     hostname: sirius-client
     environment:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_SIRIUS_API_HOST}
@@ -106,7 +98,6 @@ services:
 
   sirius-cluster-client:
     image: mouselightpipeline/worker-client
-    container_name: "sirius-cluster-client"
     hostname: sirius-cluster-client
     environment:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_SIRIUS_API_HOST}
@@ -118,7 +109,6 @@ services:
 
   vega-client:
     image: mouselightpipeline/worker-client
-    container_name: "vega-client"
     hostname: vega-client
     environment:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_VEGA_API_HOST}
@@ -130,7 +120,6 @@ services:
 
   vega-cluster-client:
     image: mouselightpipeline/worker-client
-    container_name: "vega-cluster-client"
     hostname: vega-cluster-client
     environment:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_VEGA_API_HOST}
