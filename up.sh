@@ -9,4 +9,8 @@ if [ -z "PIPELINE_API_HOST" ]; then
     exit 1
 fi
 
-docker-compose -p pipeline up -d
+if [ -z "PIPELINE_COMPOSE_PROJECT" ]; then
+    export PIPELINE_COMPOSE_PROJECT="pipeline"
+fi
+
+docker-compose -p ${PIPELINE_COMPOSE_PROJECT} up -d

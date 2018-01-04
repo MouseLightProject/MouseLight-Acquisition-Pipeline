@@ -4,4 +4,8 @@ if [ -a "options.sh" ]; then
     source "options.sh"
 fi
 
-docker-compose -p pipeline stop
+if [ -z "PIPELINE_COMPOSE_PROJECT" ]; then
+    export PIPELINE_COMPOSE_PROJECT="pipeline"
+fi
+
+docker-compose -p ${PIPELINE_COMPOSE_PROJECT} stop

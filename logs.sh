@@ -1,3 +1,11 @@
 #!/usr/bin/env bash
 
-docker-compose -p pipeline logs --follow
+if [ -a "options.sh" ]; then
+    source "options.sh"
+fi
+
+if [ -z "PIPELINE_COMPOSE_PROJECT" ]; then
+    export PIPELINE_COMPOSE_PROJECT="pipeline"
+fi
+
+docker-compose -p ${PIPELINE_COMPOSE_PROJECT} logs --follow
