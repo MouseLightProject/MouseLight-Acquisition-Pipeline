@@ -58,6 +58,7 @@ services:
     hostname: pipeline-client
     environment:
       PIPELINE_API_HOST: ${PIPELINE_API_HOST}
+      PIPELINE_API_PORT: ${PIPELINE_API_PORT}
     ports:
       - ${PIPELINE_CLIENT_PORT}:3100
     networks:

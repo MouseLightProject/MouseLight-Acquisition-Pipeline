@@ -5,6 +5,7 @@ export PIPELINE_COMPOSE_PROJECT=
 
 # Location of the the coordinator API server.
 export PIPELINE_API_HOST=
+export PIPELINE_API_PORT=
 
 # Location of the the "vega, sirius, canopus" workers.
 export PIPELINE_CANOPUS_API_HOST=
