@@ -5,7 +5,7 @@ services:
     hostname: pipeline-metrics-db
     container_name: "pipeline-metrics-db"
     ports:
-      - 3900:8086
+      - ${METRICS_DB_PORT}:8086
     volumes:
       - influx_data:/var/lib/influxdb
       - influx_config:/etc/influxdb
@@ -17,7 +17,7 @@ services:
     hostname: pipeline-grafana
     container_name: "pipeline-grafana"
     ports:
-      - 3910:3000
+      - ${GRAFANA_PORT}:3000
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: 1
       GF_AUTH_ANONYMOUS_ORG_NAME: "Janelia"
@@ -33,8 +33,8 @@ services:
     container_name: "pipeline-message-queue"
     hostname: pipeline-message-queue
     ports:
-      - 3982:5672
-      - 3992:15672
+      - ${MESSAGE_QUEUE_PORT}:5672
+      - ${MESSAGE_QUEUE_API_PORT}:15672
     environment:
       RABBITMQ_ERLANG_COOKIE: "mqsecret"
     volumes:
@@ -47,7 +47,7 @@ services:
     container_name: "pipeline-db"
     hostname: pipeline-db
     ports:
-      - 3932:5432
+      - ${PIPELINE_DB_PORT}:5432
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_PASSWORD: "pgsecret"
@@ -64,55 +64,7 @@ services:
     environment:
       PIPELINE_API_HOST: ${PIPELINE_API_HOST}
     ports:
-      - 3100:3100
-    networks:
-      - back_tier
-
-  vega-client:
-    image: mouselightpipeline/worker-client
-    container_name: "vega-client"
-    hostname: vega-client
-    environment:
-      PIPELINE_WORKER_API_HOST: ${PIPELINE_VEGA_API_HOST}
-      PIPELINE_WORKER_API_PORT: 3500
-    ports:
-      - 3600:3600
-    networks:
-      - back_tier
-
-  vega-cluster-client:
-    image: mouselightpipeline/worker-client
-    container_name: "vega-cluster-client"
-    hostname: vega-cluster-client
-    environment:
-      PIPELINE_WORKER_API_HOST: ${PIPELINE_VEGA_API_HOST}
-      PIPELINE_WORKER_API_PORT: 3510
-    ports:
-      - 3610:3600
-    networks:
-      - back_tier
-
-  sirius-client:
-    image: mouselightpipeline/worker-client
-    container_name: "sirius-client"
-    hostname: sirius-client
-    environment:
-      PIPELINE_WORKER_API_HOST: ${PIPELINE_SIRIUS_API_HOST}
-      PIPELINE_WORKER_API_PORT: 3500
-    ports:
-      - 3620:3600
-    networks:
-      - back_tier
-
-  sirius-cluster-client:
-    image: mouselightpipeline/worker-client
-    container_name: "sirius-cluster-client"
-    hostname: sirius-cluster-client
-    environment:
-      PIPELINE_WORKER_API_HOST: ${PIPELINE_SIRIUS_API_HOST}
-      PIPELINE_WORKER_API_PORT: 3510
-    ports:
-      - 3630:3600
+      - ${PIPELINE_CLIENT_PORT}:3100
     networks:
       - back_tier
 
@@ -122,9 +74,9 @@ services:
     hostname: canopus-client
     environment:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_CANOPUS_API_HOST}
-      PIPELINE_WORKER_API_PORT: 3500
+      PIPELINE_WORKER_API_PORT: ${PIPELINE_LOCAL_WORKER_API_PORT}
     ports:
-      - 3640:3600
+      - ${PIPELINE_CANOPUS_LOCAL_CLIENT_PORT}:3600
     networks:
       - back_tier
 
@@ -134,9 +86,57 @@ services:
     hostname: canopus-cluster-client
     environment:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_CANOPUS_API_HOST}
-      PIPELINE_WORKER_API_PORT: 3510
+      PIPELINE_WORKER_API_PORT: ${PIPELINE_CLUSTER_WORKER_API_PORT}
     ports:
-      - 3650:3600
+      - ${PIPELINE_CANOPUS_CLUSTER_CLIENT_PORT}:3600
+    networks:
+      - back_tier
+
+  sirius-client:
+    image: mouselightpipeline/worker-client
+    container_name: "sirius-client"
+    hostname: sirius-client
+    environment:
+      PIPELINE_WORKER_API_HOST: ${PIPELINE_SIRIUS_API_HOST}
+      PIPELINE_WORKER_API_PORT: ${PIPELINE_LOCAL_WORKER_API_PORT}
+    ports:
+      - ${PIPELINE_SIRIUS_LOCAL_CLIENT_PORT}:3600
+    networks:
+      - back_tier
+
+  sirius-cluster-client:
+    image: mouselightpipeline/worker-client
+    container_name: "sirius-cluster-client"
+    hostname: sirius-cluster-client
+    environment:
+      PIPELINE_WORKER_API_HOST: ${PIPELINE_SIRIUS_API_HOST}
+      PIPELINE_WORKER_API_PORT: ${PIPELINE_CLUSTER_WORKER_API_PORT}
+    ports:
+      - ${PIPELINE_SIRIUS_CLUSTER_CLIENT_PORT}:3600
+    networks:
+      - back_tier
+
+  vega-client:
+    image: mouselightpipeline/worker-client
+    container_name: "vega-client"
+    hostname: vega-client
+    environment:
+      PIPELINE_WORKER_API_HOST: ${PIPELINE_VEGA_API_HOST}
+      PIPELINE_WORKER_API_PORT: ${PIPELINE_LOCAL_WORKER_API_PORT}
+    ports:
+      - ${PIPELINE_VEGA_LOCAL_CLIENT_PORT}:3600
+    networks:
+      - back_tier
+
+  vega-cluster-client:
+    image: mouselightpipeline/worker-client
+    container_name: "vega-cluster-client"
+    hostname: vega-cluster-client
+    environment:
+      PIPELINE_WORKER_API_HOST: ${PIPELINE_VEGA_API_HOST}
+      PIPELINE_WORKER_API_PORT: ${PIPELINE_CLUSTER_WORKER_API_PORT}
+    ports:
+      - ${PIPELINE_VEGA_CLUSTER_CLIENT_PORT}:3600
     networks:
       - back_tier
 
