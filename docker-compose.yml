@@ -1,21 +1,48 @@
 version: '3.1'
 services:
-  metrics-db:
-    image: influxdb
-    hostname: pipeline-metrics-db
+  pipeline-db:
+    image: postgres:9
+    hostname: pipeline-db
     ports:
-      - ${METRICS_DB_PORT}:8086
+      - "${PIPELINE_DATABASE_PORT}:5432"
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_PASSWORD: "pgsecret"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./datastore/pipeline:/docker-entrypoint-initdb.d
+    networks:
+      - back_tier
+
+  pipeline-message-queue:
+    image: rabbitmq:3-management
+    hostname: pipeline-message-queue
+    ports:
+      - "${PIPELINE_MESSAGE_API_PORT}:5672"
+      - "${PIPELINE_MESSAGE_UI_PORT}:15672"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "mqsecret"
+    volumes:
+      - mq_data:/var/lib/rabbitmq
+    networks:
+      - back_tier
+
+  pipeline-metrics:
+    image: influxdb:1.4
+    hostname: pipeline-metrics
+    ports:
+      - "${PIPELINE_INFLUX_PORT}:8086"
     volumes:
       - influx_data:/var/lib/influxdb
       - influx_config:/etc/influxdb
     networks:
       - back_tier
 
-  grafana:
-    image: grafana/grafana
+  pipeline-grafana:
+    image: grafana/grafana:5.0.0
     hostname: pipeline-grafana
     ports:
-      - ${GRAFANA_PORT}:3000
+      - "${PIPELINE_GRAFANA_PORT}:3000"
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: 1
       GF_AUTH_ANONYMOUS_ORG_NAME: "Janelia"
@@ -26,33 +53,6 @@ services:
     networks:
       - back_tier
 
-  message-queue:
-    image: rabbitmq:3-management
-    hostname: pipeline-message-queue
-    ports:
-      - ${MESSAGE_QUEUE_PORT}:5672
-      - ${MESSAGE_QUEUE_API_PORT}:15672
-    environment:
-      RABBITMQ_ERLANG_COOKIE: "mqsecret"
-    volumes:
-      - mq_data:/var/lib/rabbitmq
-    networks:
-      - back_tier
-
-  pipeline-db:
-    image: postgres:9
-    hostname: pipeline-db
-    ports:
-      - ${PIPELINE_DB_PORT}:5432
-    environment:
-      PGDATA: /var/lib/postgresql/data/pgdata
-      POSTGRES_PASSWORD: "pgsecret"
-    volumes:
-      - pipeline_data:/var/lib/postgresql/data
-      - ./datastore/pipeline:/docker-entrypoint-initdb.d
-    networks:
-      - back_tier
-
   pipeline-client:
     image: mouselightpipeline/pipeline-client
     hostname: pipeline-client
@@ -60,7 +60,7 @@ services:
       PIPELINE_API_HOST: ${PIPELINE_API_HOST}
       PIPELINE_API_PORT: ${PIPELINE_API_PORT}
     ports:
-      - ${PIPELINE_CLIENT_PORT}:3100
+      - ${PIPELINE_CLIENT_PORT}:6101
     networks:
       - back_tier
 
@@ -71,7 +71,7 @@ services:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_CANOPUS_API_HOST}
       PIPELINE_WORKER_API_PORT: ${PIPELINE_LOCAL_WORKER_API_PORT}
     ports:
-      - ${PIPELINE_CANOPUS_LOCAL_CLIENT_PORT}:3600
+      - ${PIPELINE_CANOPUS_LOCAL_CLIENT_PORT}:6301
     networks:
       - back_tier
 
@@ -82,7 +82,7 @@ services:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_CANOPUS_API_HOST}
       PIPELINE_WORKER_API_PORT: ${PIPELINE_CLUSTER_WORKER_API_PORT}
     ports:
-      - ${PIPELINE_CANOPUS_CLUSTER_CLIENT_PORT}:3600
+      - ${PIPELINE_CANOPUS_CLUSTER_CLIENT_PORT}:6301
     networks:
       - back_tier
 
@@ -93,7 +93,7 @@ services:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_SIRIUS_API_HOST}
       PIPELINE_WORKER_API_PORT: ${PIPELINE_LOCAL_WORKER_API_PORT}
     ports:
-      - ${PIPELINE_SIRIUS_LOCAL_CLIENT_PORT}:3600
+      - ${PIPELINE_SIRIUS_LOCAL_CLIENT_PORT}:6301
     networks:
       - back_tier
 
@@ -104,7 +104,7 @@ services:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_SIRIUS_API_HOST}
       PIPELINE_WORKER_API_PORT: ${PIPELINE_CLUSTER_WORKER_API_PORT}
     ports:
-      - ${PIPELINE_SIRIUS_CLUSTER_CLIENT_PORT}:3600
+      - ${PIPELINE_SIRIUS_CLUSTER_CLIENT_PORT}:6301
     networks:
       - back_tier
 
@@ -115,7 +115,7 @@ services:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_VEGA_API_HOST}
       PIPELINE_WORKER_API_PORT: ${PIPELINE_LOCAL_WORKER_API_PORT}
     ports:
-      - ${PIPELINE_VEGA_LOCAL_CLIENT_PORT}:3600
+      - ${PIPELINE_VEGA_LOCAL_CLIENT_PORT}:6301
     networks:
       - back_tier
 
@@ -126,7 +126,7 @@ services:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_VEGA_API_HOST}
       PIPELINE_WORKER_API_PORT: ${PIPELINE_CLUSTER_WORKER_API_PORT}
     ports:
-      - ${PIPELINE_VEGA_CLUSTER_CLIENT_PORT}:3600
+      - ${PIPELINE_VEGA_CLUSTER_CLIENT_PORT}:6301
     networks:
       - back_tier
 
@@ -137,7 +137,7 @@ volumes:
   grafana_log:
   grafana_data:
   mq_data:
-  pipeline_data:
+  postgres_data:
 
 networks:
   back_tier:
