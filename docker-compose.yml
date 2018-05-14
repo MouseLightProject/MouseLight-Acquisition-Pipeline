@@ -60,7 +60,7 @@ services:
       PIPELINE_API_HOST: ${PIPELINE_API_HOST}
       PIPELINE_API_PORT: ${PIPELINE_API_PORT}
     ports:
-      - ${PIPELINE_CLIENT_PORT}:6101
+      - ${PIPELINE_API_CLIENT_PORT}:6101
     networks:
       - back_tier
 
