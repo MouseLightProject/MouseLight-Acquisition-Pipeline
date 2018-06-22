@@ -1,0 +1,77 @@
+version: '3.1'
+#
+# There are a number of required environmental variables.  For a new installation, copy and past .env-template as .env
+# and change the values as appropriate.
+#
+services:
+  canopus-client:
+    image: mouselightpipeline/worker-client
+    hostname: canopus-client
+    environment:
+      PIPELINE_WORKER_API_HOST: ${PIPELINE_CANOPUS_API_HOST}
+      PIPELINE_WORKER_API_PORT: ${PIPELINE_LOCAL_WORKER_API_PORT}
+    ports:
+      - ${PIPELINE_CANOPUS_LOCAL_CLIENT_PORT}:6301
+    networks:
+      - back_tier
+
+  canopus-cluster-client:
+    image: mouselightpipeline/worker-client
+    hostname: canopus-cluster-client
+    environment:
+      PIPELINE_WORKER_API_HOST: ${PIPELINE_CANOPUS_API_HOST}
+      PIPELINE_WORKER_API_PORT: ${PIPELINE_CLUSTER_WORKER_API_PORT}
+    ports:
+      - ${PIPELINE_CANOPUS_CLUSTER_CLIENT_PORT}:6301
+    networks:
+      - back_tier
+
+  sirius-client:
+    image: mouselightpipeline/worker-client
+    hostname: sirius-client
+    environment:
+      PIPELINE_WORKER_API_HOST: ${PIPELINE_SIRIUS_API_HOST}
+      PIPELINE_WORKER_API_PORT: ${PIPELINE_LOCAL_WORKER_API_PORT}
+    ports:
+      - ${PIPELINE_SIRIUS_LOCAL_CLIENT_PORT}:6301
+    networks:
+      - back_tier
+
+  sirius-cluster-client:
+    image: mouselightpipeline/worker-client
+    hostname: sirius-cluster-client
+    environment:
+      PIPELINE_WORKER_API_HOST: ${PIPELINE_SIRIUS_API_HOST}
+      PIPELINE_WORKER_API_PORT: ${PIPELINE_CLUSTER_WORKER_API_PORT}
+    ports:
+      - ${PIPELINE_SIRIUS_CLUSTER_CLIENT_PORT}:6301
+    networks:
+      - back_tier
+
+  vega-client:
+    image: mouselightpipeline/worker-client
+    hostname: vega-client
+    environment:
+      PIPELINE_WORKER_API_HOST: ${PIPELINE_VEGA_API_HOST}
+      PIPELINE_WORKER_API_PORT: ${PIPELINE_LOCAL_WORKER_API_PORT}
+    ports:
+      - ${PIPELINE_VEGA_LOCAL_CLIENT_PORT}:6301
+    networks:
+      - back_tier
+
+  vega-cluster-client:
+    image: mouselightpipeline/worker-client
+    hostname: vega-cluster-client
+    environment:
+      PIPELINE_WORKER_API_HOST: ${PIPELINE_VEGA_API_HOST}
+      PIPELINE_WORKER_API_PORT: ${PIPELINE_CLUSTER_WORKER_API_PORT}
+    ports:
+      - ${PIPELINE_VEGA_CLUSTER_CLIENT_PORT}:6301
+    networks:
+      - back_tier
+  #
+  # Not present: worker backend/api service - must be run where local paths to data are accessible
+  #
+
+networks:
+  back_tier:

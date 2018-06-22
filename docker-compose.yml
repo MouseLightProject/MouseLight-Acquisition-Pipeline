@@ -1,5 +1,15 @@
 version: '3.1'
+#
+# There are a number of required environmental variables.  For a new installation, copy and past .env-template as .env
+# and change the values as appropriate.
+#
 services:
+  #
+  # Core Services (standard/required for any system), can be deployed anywhere
+  #
+  # These host names can be changed, but must the defaults in dependent systems must be overridden via environment
+  # variables.
+  #
   pipeline-db:
     image: postgres:9
     hostname: pipeline-db
@@ -50,84 +60,6 @@ services:
       - grafana_data:/var/lib/grafana
       - grafana_config:/etc/grafana
       - grafana_log:/var/log/grafana
-    networks:
-      - back_tier
-
-  pipeline-client:
-    image: mouselightpipeline/pipeline-client
-    hostname: pipeline-client
-    environment:
-      PIPELINE_API_HOST: ${PIPELINE_API_HOST}
-      PIPELINE_API_PORT: ${PIPELINE_API_PORT}
-    ports:
-      - ${PIPELINE_API_CLIENT_PORT}:6101
-      - ${PIPELINE_API_CLIENT_SOCKET_PORT}:6102
-    networks:
-      - back_tier
-
-  canopus-client:
-    image: mouselightpipeline/worker-client
-    hostname: canopus-client
-    environment:
-      PIPELINE_WORKER_API_HOST: ${PIPELINE_CANOPUS_API_HOST}
-      PIPELINE_WORKER_API_PORT: ${PIPELINE_LOCAL_WORKER_API_PORT}
-    ports:
-      - ${PIPELINE_CANOPUS_LOCAL_CLIENT_PORT}:6301
-    networks:
-      - back_tier
-
-  canopus-cluster-client:
-    image: mouselightpipeline/worker-client
-    hostname: canopus-cluster-client
-    environment:
-      PIPELINE_WORKER_API_HOST: ${PIPELINE_CANOPUS_API_HOST}
-      PIPELINE_WORKER_API_PORT: ${PIPELINE_CLUSTER_WORKER_API_PORT}
-    ports:
-      - ${PIPELINE_CANOPUS_CLUSTER_CLIENT_PORT}:6301
-    networks:
-      - back_tier
-
-  sirius-client:
-    image: mouselightpipeline/worker-client
-    hostname: sirius-client
-    environment:
-      PIPELINE_WORKER_API_HOST: ${PIPELINE_SIRIUS_API_HOST}
-      PIPELINE_WORKER_API_PORT: ${PIPELINE_LOCAL_WORKER_API_PORT}
-    ports:
-      - ${PIPELINE_SIRIUS_LOCAL_CLIENT_PORT}:6301
-    networks:
-      - back_tier
-
-  sirius-cluster-client:
-    image: mouselightpipeline/worker-client
-    hostname: sirius-cluster-client
-    environment:
-      PIPELINE_WORKER_API_HOST: ${PIPELINE_SIRIUS_API_HOST}
-      PIPELINE_WORKER_API_PORT: ${PIPELINE_CLUSTER_WORKER_API_PORT}
-    ports:
-      - ${PIPELINE_SIRIUS_CLUSTER_CLIENT_PORT}:6301
-    networks:
-      - back_tier
-
-  vega-client:
-    image: mouselightpipeline/worker-client
-    hostname: vega-client
-    environment:
-      PIPELINE_WORKER_API_HOST: ${PIPELINE_VEGA_API_HOST}
-      PIPELINE_WORKER_API_PORT: ${PIPELINE_LOCAL_WORKER_API_PORT}
-    ports:
-      - ${PIPELINE_VEGA_LOCAL_CLIENT_PORT}:6301
-    networks:
-      - back_tier
-
-  vega-cluster-client:
-    image: mouselightpipeline/worker-client
-    hostname: vega-cluster-client
-    environment:
-      PIPELINE_WORKER_API_HOST: ${PIPELINE_VEGA_API_HOST}
-      PIPELINE_WORKER_API_PORT: ${PIPELINE_CLUSTER_WORKER_API_PORT}
-    ports:
-      - ${PIPELINE_VEGA_CLUSTER_CLIENT_PORT}:6301
     networks:
       - back_tier
 

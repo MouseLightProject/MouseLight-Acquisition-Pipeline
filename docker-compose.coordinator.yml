@@ -1,0 +1,47 @@
+version: '3.1'
+#
+# There are a number of required environmental variables.  For a new installation, copy and past .env-template as .env
+# and change the values as appropriate.
+#
+services:
+  #
+  # Coordinator/scheduler - required, can be deployed anywhere
+  #
+  pipeline-api:
+    image: mouselightpipeline/pipeline-api
+    hostname: pipeline-api
+    environment:
+      - "PIPELINE_DATABASE_PORT:${PIPELINE_DATABASE_PORT}"
+    ports:
+      - ${PIPELINE_API_PORT}:6001
+    volumes:
+      - "${EXTERNAL_DATA_VOLUME}:${CONTAINER_DATA_VOLUME}"
+    networks:
+      - back_tier
+
+  pipeline-scheduler:
+    image: mouselightpipeline/scheduler
+    hostname: pipeline-scheduler
+    environment:
+      - "PIPELINE_DATABASE_PORT:${PIPELINE_DATABASE_PORT}"
+      - "PIPELINE_INFLUX_PORT:${PIPELINE_INFLUX_PORT}"
+      - "PIPELINE_MESSAGE_API_PORT:${PIPELINE_MESSAGE_API_PORT}"
+    ports:
+      - ${PIPELINE_SCHEDULER_PORT}:6002
+    networks:
+      - back_tier
+
+  pipeline-client:
+    image: mouselightpipeline/pipeline-client
+    hostname: pipeline-client
+    environment:
+      PIPELINE_API_HOST: ${PIPELINE_API_HOST}
+      PIPELINE_API_PORT: ${PIPELINE_API_PORT}
+    ports:
+      - ${PIPELINE_API_CLIENT_PORT}:6101
+      - ${PIPELINE_API_CLIENT_SOCKET_PORT}:6102
+    networks:
+      - back_tier
+
+networks:
+  back_tier:
