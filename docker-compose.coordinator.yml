@@ -15,7 +15,8 @@ services:
     ports:
       - ${PIPELINE_API_PORT}:6001
     volumes:
-      - "${EXTERNAL_DATA_VOLUME}:${CONTAINER_DATA_VOLUME}"
+      - "${EXTERNAL_DATA_VOLUME_1}:${CONTAINER_DATA_VOLUME_1}"
+      - "${EXTERNAL_DATA_VOLUME_2}:${CONTAINER_DATA_VOLUME_2}"
     networks:
       - back_tier
 
