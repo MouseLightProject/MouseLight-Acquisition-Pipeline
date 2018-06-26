@@ -38,7 +38,7 @@ services:
       - back_tier
 
   pipeline-metrics:
-    image: influxdb:1.4
+    image: influxdb:1.5
     hostname: pipeline-metrics
     ports:
       - "${PIPELINE_INFLUX_PORT}:8086"
@@ -49,7 +49,7 @@ services:
       - back_tier
 
   pipeline-grafana:
-    image: grafana/grafana:5.0.0
+    image: grafana/grafana:5.1.4
     hostname: pipeline-grafana
     ports:
       - "${PIPELINE_GRAFANA_PORT}:3000"

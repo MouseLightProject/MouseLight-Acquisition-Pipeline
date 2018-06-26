@@ -40,7 +40,7 @@ services:
       PIPELINE_API_PORT: ${PIPELINE_API_PORT}
     ports:
       - ${PIPELINE_API_CLIENT_PORT}:6101
-      - ${PIPELINE_API_CLIENT_SOCKET_PORT}:6102
+      - ${PIPELINE_API_CLIENT_SOCKET_IO_PORT}:6102
     networks:
       - back_tier
 
