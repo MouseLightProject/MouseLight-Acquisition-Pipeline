@@ -26,6 +26,8 @@ services:
       - ${PIPELINE_SCHEDULER_PORT}:6002
     volumes:
       - log_output:/var/log/pipeline
+      - "${EXTERNAL_DATA_VOLUME_1}:${CONTAINER_DATA_VOLUME_1}"
+      - "${EXTERNAL_DATA_VOLUME_2}:${CONTAINER_DATA_VOLUME_2}"
     networks:
       - back_tier
 
