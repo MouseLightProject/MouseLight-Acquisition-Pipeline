@@ -10,11 +10,10 @@ services:
   pipeline-api:
     image: mouselightpipeline/pipeline-api
     hostname: pipeline-api
-    environment:
-      - "PIPELINE_DATABASE_PORT:${PIPELINE_DATABASE_PORT}"
     ports:
       - ${PIPELINE_API_PORT}:6001
     volumes:
+      - log_output:/var/log/pipeline
       - "${EXTERNAL_DATA_VOLUME_1}:${CONTAINER_DATA_VOLUME_1}"
       - "${EXTERNAL_DATA_VOLUME_2}:${CONTAINER_DATA_VOLUME_2}"
     networks:
@@ -23,26 +22,26 @@ services:
   pipeline-scheduler:
     image: mouselightpipeline/scheduler
     hostname: pipeline-scheduler
-    environment:
-      - "PIPELINE_DATABASE_PORT:${PIPELINE_DATABASE_PORT}"
-      - "PIPELINE_INFLUX_PORT:${PIPELINE_INFLUX_PORT}"
-      - "PIPELINE_MESSAGE_API_PORT:${PIPELINE_MESSAGE_API_PORT}"
     ports:
       - ${PIPELINE_SCHEDULER_PORT}:6002
+    volumes:
+      - log_output:/var/log/pipeline
     networks:
       - back_tier
 
   pipeline-client:
     image: mouselightpipeline/pipeline-client
     hostname: pipeline-client
-    environment:
-      PIPELINE_API_HOST: ${PIPELINE_API_HOST}
-      PIPELINE_API_PORT: ${PIPELINE_API_PORT}
     ports:
       - ${PIPELINE_API_CLIENT_PORT}:6101
       - ${PIPELINE_API_CLIENT_SOCKET_IO_PORT}:6102
+    volumes:
+      - log_output:/var/log/pipeline
     networks:
       - back_tier
+
+volumes:
+  log_output:
 
 networks:
   back_tier:

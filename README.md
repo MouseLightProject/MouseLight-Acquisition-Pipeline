@@ -42,6 +42,14 @@ your override in `options.sh`.
 
 ## Misc Notes
 
-To connect to the container database instance from the command line for direct interaction use:
+Temporary container to view output logs:
+
+`./pipeline-logs.sh`
+
+Connect to the container database instance from the command line for direct interaction use:
 
 `docker run -it --rm --link pipeline_db:postgres --network pipeline_back_tier postgres:9 psql -h postgres -U postgres`
+
+Connect to an API instance:
+
+`docker run -it --rm --network pipelineb_back_tier -v /mnt/groups:/groups/mousebrainmicro/mousebrainmicro -p 7001:6001 mouselightpipeline/pipeline-api /bin/bash`

@@ -12,6 +12,8 @@ services:
       PIPELINE_WORKER_API_PORT: ${PIPELINE_LOCAL_WORKER_API_PORT}
     ports:
       - ${PIPELINE_CANOPUS_LOCAL_CLIENT_PORT}:6301
+    volumes:
+      - log_output:/var/log/pipeline
     networks:
       - back_tier
 
@@ -23,6 +25,8 @@ services:
       PIPELINE_WORKER_API_PORT: ${PIPELINE_CLUSTER_WORKER_API_PORT}
     ports:
       - ${PIPELINE_CANOPUS_CLUSTER_CLIENT_PORT}:6301
+    volumes:
+      - log_output:/var/log/pipeline
     networks:
       - back_tier
 
@@ -34,6 +38,8 @@ services:
       PIPELINE_WORKER_API_PORT: ${PIPELINE_LOCAL_WORKER_API_PORT}
     ports:
       - ${PIPELINE_SIRIUS_LOCAL_CLIENT_PORT}:6301
+    volumes:
+      - log_output:/var/log/pipeline
     networks:
       - back_tier
 
@@ -45,6 +51,8 @@ services:
       PIPELINE_WORKER_API_PORT: ${PIPELINE_CLUSTER_WORKER_API_PORT}
     ports:
       - ${PIPELINE_SIRIUS_CLUSTER_CLIENT_PORT}:6301
+    volumes:
+      - log_output:/var/log/pipeline
     networks:
       - back_tier
 
@@ -56,6 +64,8 @@ services:
       PIPELINE_WORKER_API_PORT: ${PIPELINE_LOCAL_WORKER_API_PORT}
     ports:
       - ${PIPELINE_VEGA_LOCAL_CLIENT_PORT}:6301
+    volumes:
+      - log_output:/var/log/pipeline
     networks:
       - back_tier
 
@@ -67,11 +77,16 @@ services:
       PIPELINE_WORKER_API_PORT: ${PIPELINE_CLUSTER_WORKER_API_PORT}
     ports:
       - ${PIPELINE_VEGA_CLUSTER_CLIENT_PORT}:6301
+    volumes:
+      - log_output:/var/log/pipeline
     networks:
       - back_tier
   #
   # Not present: worker backend/api service - must be run where local paths to data are accessible
   #
+
+volumes:
+  log_output:
 
 networks:
   back_tier:
