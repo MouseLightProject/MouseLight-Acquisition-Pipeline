@@ -50,6 +50,18 @@ Connect to the container database instance from the command line for direct inte
 
 `docker run -it --rm --link pipeline_db:postgres --network pipeline_back_tier postgres:9 psql -h postgres -U postgres`
 
-Connect to an API instance:
+Connect to an API instance (change network and exposed port as appropriate):
 
 `docker run -it --rm --network pipelineb_back_tier -v /mnt/groups:/groups/mousebrainmicro/mousebrainmicro -p 7001:6001 mouselightpipeline/pipeline-api /bin/bash`
+
+If the migration was not automatically run
+
+`./migrate.sh`
+
+and then if seed is needed (only on a full system refresh) from within the container:
+
+`export PIPELINE_TASK_ROOT=/groups/mousebrainmicro/mousebrainmicro/Software/pipeline-a` (or -b)
+
+before
+
+`./seed.sh`
