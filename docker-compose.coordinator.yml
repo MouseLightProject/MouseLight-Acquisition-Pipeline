@@ -34,6 +34,9 @@ services:
   pipeline-client:
     image: mouselightpipeline/pipeline-client
     hostname: pipeline-client
+    environment:
+       PIPELINE_THUMBS_HOST: ${PIPELINE_THUMBS_HOST}
+       PIPELINE_THUMBS_PORT: ${PIPELINE_THUMBS_PORT}
     ports:
       - ${PIPELINE_API_CLIENT_PORT}:6101
       - ${PIPELINE_API_CLIENT_SOCKET_IO_PORT}:6102
