@@ -8,7 +8,7 @@ services:
   # Coordinator/scheduler - required, can be deployed anywhere
   #
   pipeline-api:
-    image: mouselightpipeline/pipeline-api
+    image: mouselightpipeline/pipeline-api:1.2
     hostname: pipeline-api
     ports:
       - ${PIPELINE_API_PORT}:6001
@@ -20,7 +20,7 @@ services:
       - back_tier
 
   pipeline-scheduler:
-    image: mouselightpipeline/scheduler
+    image: mouselightpipeline/scheduler:1.2
     hostname: pipeline-scheduler
     ports:
       - ${PIPELINE_SCHEDULER_PORT}:6002
@@ -32,11 +32,12 @@ services:
       - back_tier
 
   pipeline-client:
-    image: mouselightpipeline/pipeline-client
+    image: mouselightpipeline/pipeline-client:1.2
     hostname: pipeline-client
     environment:
        PIPELINE_THUMBS_HOST: ${PIPELINE_THUMBS_HOST}
        PIPELINE_THUMBS_PORT: ${PIPELINE_THUMBS_PORT}
+       PIPELINE_IS_ACTIVE: ${PIPELINE_IS_ACTIVE}
     ports:
       - ${PIPELINE_API_CLIENT_PORT}:6101
       - ${PIPELINE_API_CLIENT_SOCKET_IO_PORT}:6102
