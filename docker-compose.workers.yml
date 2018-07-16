@@ -5,7 +5,7 @@ version: '3.1'
 #
 services:
   canopus-client:
-    image: mouselightpipeline/worker-client:1.2
+    image: mouselightpipeline/worker-client:1.3
     hostname: canopus-client
     environment:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_CANOPUS_API_HOST}
@@ -18,7 +18,7 @@ services:
       - back_tier
 
   sirius-client:
-    image: mouselightpipeline/worker-client:1.2
+    image: mouselightpipeline/worker-client:1.3
     hostname: sirius-client
     environment:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_SIRIUS_API_HOST}
@@ -31,7 +31,7 @@ services:
       - back_tier
 
   vega-client:
-    image: mouselightpipeline/worker-client:1.2
+    image: mouselightpipeline/worker-client:1.3
     hostname: vega-client
     environment:
       PIPELINE_WORKER_API_HOST: ${PIPELINE_VEGA_API_HOST}
