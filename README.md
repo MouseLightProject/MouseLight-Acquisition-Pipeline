@@ -54,13 +54,25 @@ Connect to an API instance (change network and exposed port as appropriate):
 
 `docker run -it --rm --network pipelineb_back_tier -v /mnt/groups:/groups/mousebrainmicro/mousebrainmicro -p 7001:6001 mouselightpipeline/pipeline-api /bin/bash`
 
+Connect to an API instance just for migration:
+
+`docker run -it --rm --network pipelinea_back_tier -v /mnt/groups:/groups/mousebrainmicro/mousebrainmicro mouselightpipeline/pipeline-api /bin/bash`
+
+or
+
+`docker run -it --rm --network pipelineb_back_tier -v /mnt/groups:/groups/mousebrainmicro/mousebrainmicro mouselightpipeline/pipeline-api /bin/bash`
+
 If the migration was not automatically run
 
 `./migrate.sh`
 
 and then if seed is needed (only on a full system refresh) from within the container:
 
-`export PIPELINE_TASK_ROOT=/groups/mousebrainmicro/mousebrainmicro/Software/pipeline-a` (or -b)
+`export PIPELINE_TASK_ROOT=/groups/mousebrainmicro/mousebrainmicro/pipeline-systems/pipeline-a`
+
+or
+
+`export PIPELINE_TASK_ROOT=/groups/mousebrainmicro/mousebrainmicro/pipeline-systems/pipeline-b`
 
 before
 
