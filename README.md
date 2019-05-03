@@ -11,7 +11,7 @@ Any stage, including the root stage, can have one or more downstream stages.  Th
 The two primary elements of the system are the coordinator and the workers.  The coordinator monitors workers, defines each project including creating and removing downstream stages, and is used to control which pipelines and stages are actively processing.  Workers are distributed across multiple machines and execute the stage functions for individual each tile.  They may do so either by perform the processing locally or by managing the submission and monitoring to some form of remote compute cluster.  Workers may be added or removed from the system at any time as well as configured to take on more or less processing load as appropriate. 
 
 
-## Pipeline Production Docker Deployment
+## General Instalation
 
 This is a general deployment configuration for running the core services (e.g., databases), coordinator (api, scheduler,
 and client), along with specific deployments for workers on vega, sirius, and canopus (local and cluster proxy).
