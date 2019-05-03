@@ -12,7 +12,7 @@ The two primary elements of the system are the coordinator and the workers.  The
 
 ## Quick Start
 
-The Mouse Light Acquistion Pipelne virtal machine is a self-contained instance of the complete MouseLight Acquisition Pipeline system.  It contains two example projects that demonstrate pipeline processing and additional ones may be added.
+The Mouse Light Acquistion Pipeline virtual machine is a self-contained instance of the complete pipeline system.  It contains two example projects that demonstrate pipeline processing and additional ones may be added.
 A VMWare version (link) and a VirtualBox version (link) are available for download.
 * Download and install VirtualBox, VMWare Player, or a similar product
 * Select and download the appropriate format for your virtual machine host application and unzip the archive
